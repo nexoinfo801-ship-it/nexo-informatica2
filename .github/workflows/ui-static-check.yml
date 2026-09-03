@@ -30,6 +30,7 @@ jobs:
           node --check ui/avare-nav-guard.js
           node --check ui/phase4.js
           node --check ui/phase5.js
+          node --check ui/phase6.js
       - name: Static security and UX sweep
         run: node tests/ui_static_check.mjs
       - name: Avaré local data integrity
@@ -38,9 +39,13 @@ jobs:
         run: node tests/phase4_regression.mjs
       - name: Phase 5 restaurant regression
         run: node tests/phase5_restaurant_regression.mjs
+      - name: Phase 6 driver center regression
+        run: node tests/phase6_driver_regression.mjs
       - name: 16 module regression
         run: node tests/regression_16_modules.mjs
       - name: SQLite contract syntax
         run: python3 tests/sql_contract_check.py
       - name: Restaurant SQLite schema
         run: python3 tests/restaurant_sql_check.py
+      - name: Driver catalog SQLite schema
+        run: python3 tests/driver_catalog_sql_check.py
