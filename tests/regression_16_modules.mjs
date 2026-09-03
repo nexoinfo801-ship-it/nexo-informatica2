@@ -39,11 +39,12 @@ check('Backup integra Suporte sem criar módulo paralelo',()=>{assert.match(p4,/
 check('Relatório diário integra Relatórios',()=>assert.match(p4,/p4DailyReport/));
 check('alerta de estoque abre Estoque',()=>assert.match(p4,/go-stock.*openPage\?\.\('estoque'/s));
 check('Delivery Pro permanece subárea do módulo Delivery',()=>{assert.match(guard,/phase9\.js/);assert.doesNotMatch(html,/data-page="entregador"/)});
+check('NEXO Intelligence permanece dentro de IA/Suporte/Dashboard',()=>{assert.match(guard,/phase10\.js/);assert.doesNotMatch(html,/data-page="intelligence"/);assert.doesNotMatch(html,/data-page="agent"/)});
 
 let failed=0;
 for(const [name,ok,msg] of checks){if(ok)console.log(`PASS  ${name}`);else{failed++;console.error(`FAIL  ${name}: ${msg}`)}}
 console.log(`\nResultado 16 módulos: ${checks.length-failed}/${checks.length} verificações PASS`);
 if(failed)process.exit(1);
 
-// O workflow já executa este gate; encadeamos a Fase 9 sem alterar o pipeline de Actions.
 await import('./phase9_delivery_regression.mjs');
+await import('./phase10_intelligence_regression.mjs');
