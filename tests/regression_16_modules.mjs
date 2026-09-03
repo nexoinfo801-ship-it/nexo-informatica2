@@ -40,6 +40,9 @@ check('Relatório diário integra Relatórios',()=>assert.match(p4,/p4DailyRepor
 check('alerta de estoque abre Estoque',()=>assert.match(p4,/go-stock.*openPage\?\.\('estoque'/s));
 check('Delivery Pro permanece subárea do módulo Delivery',()=>{assert.match(guard,/phase9\.js/);assert.doesNotMatch(html,/data-page="entregador"/)});
 check('NEXO Intelligence permanece dentro de IA/Suporte/Dashboard',()=>{assert.match(guard,/phase10\.js/);assert.doesNotMatch(html,/data-page="intelligence"/);assert.doesNotMatch(html,/data-page="agent"/)});
+check('NEXO Fiscal permanece opcional dentro de Integrações/Produtos',()=>{assert.match(guard,/phase11\.js/);assert.doesNotMatch(html,/data-page="fiscal"/)});
+check('NEXO Aprender permanece dentro de Suporte',()=>{assert.match(guard,/phase12\.js/);assert.doesNotMatch(html,/data-page="aprender"/)});
+check('Delivery Enterprise amplia Delivery sem menu paralelo',()=>{assert.match(guard,/phase13\.js/);assert.doesNotMatch(html,/data-page="mapa"/)});
 
 let failed=0;
 for(const [name,ok,msg] of checks){if(ok)console.log(`PASS  ${name}`);else{failed++;console.error(`FAIL  ${name}: ${msg}`)}}
@@ -48,3 +51,6 @@ if(failed)process.exit(1);
 
 await import('./phase9_delivery_regression.mjs');
 await import('./phase10_intelligence_regression.mjs');
+await import('./phase11_fiscal_regression.mjs');
+await import('./phase12_aprender_regression.mjs');
+await import('./phase13_delivery_enterprise_regression.mjs');
