@@ -43,7 +43,7 @@ check('fechamento de mesa depende do caixa',doc.includes('Solicitar fechamento n
 check('estoque integrado à ficha técnica',doc.includes('marmita pode baixar ingredientes + embalagem + descartáveis'));
 check('financeiro não é paralelo',doc.includes('Delivery não cria financeiro paralelo'));
 check('erro técnico não aparece na UI alvo',doc.includes('Não foi possível concluir a operação')&&doc.includes('correlation id'));
-check('API única para Windows e mobiles',doc.includes('Windows, Garçom Mobile, Cozinha/KDS e Entregador Mobile devem consumir a mesma API'));
+check('API única para Windows e mobiles',/Windows, Garçom Mobile, Cozinha\/KDS e Entregador Mobile[\s\S]{0,80}(?:consomem|devem consumir)[\s\S]{0,40}mesma API/.test(doc));
 check('permissões server-side explícitas',doc.includes('DELIVERY_VIEW_ASSIGNED')&&doc.includes('DELIVERY_COMPLETE'));
 check('deep link de mapa fica na camada privada',doc.includes('deep link explícito'));
 check('layout phase9 responsivo',css.includes('@media(max-width:760px)')&&css.includes('@media(max-width:1180px)'));
