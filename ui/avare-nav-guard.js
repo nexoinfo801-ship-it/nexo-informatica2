@@ -15,4 +15,11 @@ if(!document.querySelector('script[data-phase8-loader]')){
   script.dataset.phase8Loader='true';
   document.head.append(script);
 }
+if(!document.querySelector('script[data-phase9-loader]')){
+  const script=document.createElement('script');
+  script.src='phase9.js';
+  script.async=false;
+  script.dataset.phase9Loader='true';
+  document.head.append(script);
+}
 })();
