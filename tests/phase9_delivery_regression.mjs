@@ -1,0 +1,53 @@
+import fs from 'node:fs';
+
+const js=fs.readFileSync('ui/phase9.js','utf8');
+const css=fs.readFileSync('ui/phase9.css','utf8');
+const loader=fs.readFileSync('ui/avare-nav-guard.js','utf8');
+const schema=fs.readFileSync('db/9_8_delivery_pro_schema.sql','utf8');
+const doc=fs.readFileSync('docs/FASE9_DELIVERY_PRO_ENTREGADOR_MOBILE.md','utf8');
+
+const checks=[];
+const check=(name,ok)=>{checks.push([name,Boolean(ok)]);console.log(`${ok?'PASS':'FAIL'}  ${name}`)};
+check('phase9 carregada por bootstrap self',loader.includes("script.src='phase9.js'")&&loader.includes("script.async=false"));
+check('phase9 CSS local/self',js.includes("l.href='phase9.css'"));
+check('phase9 sem innerHTML',!js.includes('innerHTML'));
+check('phase9 sem insertAdjacentHTML',!js.includes('insertAdjacentHTML'));
+check('phase9 sem eval',!js.includes('eval('));
+check('phase9 sem new Function',!js.includes('new Function'));
+check('phase9 sem URL remota',!/(https?:\/\/)/.test(js));
+check('Delivery Pro dentro do módulo existente',js.includes("d.getElementById('page-delivery')")&&js.includes('Delivery Pro — Fluxo operacional'));
+check('Entregador Mobile presente',js.includes('Entregador Mobile'));
+check('cliente suporta múltiplos endereços',js.includes('Casa')&&js.includes('Trabalho')&&schema.includes('delivery_customer_address'));
+check('taxa por região presente',js.includes('Taxas por região')&&schema.includes('delivery_fee_rule'));
+check('gratuidade por valor prevista',schema.includes('free_above_cents'));
+check('entregadores possuem disponibilidade',schema.includes("'AVAILABLE','DELIVERING','OFFLINE'"));
+check('compensação FIXED/PER_KM/REGION',schema.includes("'FIXED','PER_KM','REGION'"));
+check('ocorrências operacionais presentes',schema.includes('delivery_occurrence')&&js.includes('Central de ocorrências'));
+check('dinheiro do entregador separado',schema.includes('delivery_payment_collection')&&schema.includes('delivery_driver_settlement'));
+check('troco é validado no schema',schema.includes('change_due_cents = CASE'));
+check('comprovante opcional previsto',schema.includes('delivery_proof'));
+check('pedido possui ciclo canônico',schema.includes('order_lifecycle'));
+check('estado pagamento separado do operacional',schema.includes('payment_state'));
+check('origens incluem WhatsApp/site/app',schema.includes("'WHATSAPP'")&&schema.includes("'SITE'")&&schema.includes("'APP'"));
+check('máquina de estados possui guard SQLite',schema.includes('trg_order_lifecycle_transition_guard'));
+check('versão obrigatória na transição',schema.includes('ORDER_VERSION_MUST_INCREMENT'));
+check('idempotência compartilhada presente',schema.includes('mobile_operation_guard')&&js.includes('processed=new Map()'));
+check('UI possui once para duplo clique/retry',js.includes('function once(key,fn)'));
+check('concorrência otimista no LAB',js.includes('expectedVersion')&&js.includes('order.version!==expectedVersion'));
+check('assignment ativo único no banco',schema.includes('uq_delivery_active_assignment'));
+check('rota não abre serviço externo no LAB',js.includes('rota do pedido')&&js.includes('não abriu serviço externo'));
+check('perfil garçom restrito',js.includes('Garçom Mobile')&&js.includes('Sem alterar preço'));
+check('perfil entregador restrito',js.includes('Sem ver caixa global')&&js.includes('Servidor valida cada comando'));
+check('servidor é autoridade no contrato',doc.includes('não confiar em preço/taxa/status enviados pelo celular'));
+check('fechamento de mesa depende do caixa',doc.includes('Solicitar fechamento não libera a mesa'));
+check('estoque integrado à ficha técnica',doc.includes('marmita pode baixar ingredientes + embalagem + descartáveis'));
+check('financeiro não é paralelo',doc.includes('Delivery não cria financeiro paralelo'));
+check('erro técnico não aparece na UI alvo',doc.includes('Não foi possível concluir a operação')&&doc.includes('correlation id'));
+check('API única para Windows e mobiles',/Windows, Garçom Mobile, Cozinha\/KDS e Entregador Mobile[\s\S]{0,80}(?:consomem|devem consumir)[\s\S]{0,40}mesma API/.test(doc));
+check('permissões server-side explícitas',doc.includes('DELIVERY_VIEW_ASSIGNED')&&doc.includes('DELIVERY_COMPLETE'));
+check('deep link de mapa fica na camada privada',doc.includes('deep link explícito'));
+check('layout phase9 responsivo',css.includes('@media(max-width:760px)')&&css.includes('@media(max-width:1180px)'));
+
+const failed=checks.filter(([,ok])=>!ok);
+console.log(`\nResultado Phase 9: ${checks.length-failed.length}/${checks.length} verificações PASS`);
+if(failed.length){console.error('Falhas:',failed.map(([n])=>n).join(', '));process.exit(1)}

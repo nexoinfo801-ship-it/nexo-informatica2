@@ -3,55 +3,70 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#070b12" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'" />
   <title>NEXO ERP PRO 9.8 LAB</title>
   <link rel="stylesheet" href="styles.css" />
+  <script src="app.js" defer></script>
+  <script src="phase2.js" defer></script>
+  <script src="avare-data.js" defer></script>
+  <script src="phase3.js" defer></script>
+  <script src="avare-nav-guard.js" defer></script>
+  <script src="phase4.js" defer></script>
+  <script src="phase5.js" defer></script>
+  <script src="phase6.js" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#workspace">Ir para o conteúdo principal</a>
   <div class="app-shell">
-    <aside class="sidebar">
-      <div class="brand">
-        <div class="brand-mark">N</div>
+    <aside class="sidebar" aria-label="Menu do NEXO ERP PRO">
+      <div class="brand" aria-label="NEXO ERP PRO">
+        <div class="brand-mark" aria-hidden="true">N</div>
         <div><strong>NEXO</strong><span>ERP PRO</span></div>
       </div>
       <div class="lab-badge">9.8 LAB</div>
       <nav class="nav" aria-label="Navegação principal">
-        <button class="nav-item active" data-page="dashboard">Dashboard</button>
-        <button class="nav-item" data-page="pdv">Nova Venda / PDV</button>
-        <button class="nav-item" data-page="pedidos">Pedidos</button>
-        <button class="nav-item" data-page="produtos">Produtos</button>
-        <button class="nav-item" data-page="estoque">Estoque</button>
-        <button class="nav-item" data-page="compras">Compras</button>
-        <button class="nav-item" data-page="caixa">Caixa</button>
-        <button class="nav-item" data-page="recebimentos">Recebimentos 360</button>
-        <button class="nav-item" data-page="financeiro">Financeiro</button>
-        <button class="nav-item" data-page="delivery">Delivery</button>
-        <button class="nav-item" data-page="clientes">Clientes</button>
-        <button class="nav-item" data-page="fornecedores">Fornecedores</button>
-        <button class="nav-item" data-page="relatorios">Relatórios</button>
-        <button class="nav-item ai-nav" data-page="ia">NEXO IA</button>
-        <button class="nav-item" data-page="integracoes">Integrações</button>
-        <button class="nav-item" data-page="suporte">Licença e Suporte</button>
+        <button type="button" class="nav-item active" data-page="dashboard" aria-current="page"><span class="nav-short" aria-hidden="true">⌂</span><span class="nav-label">Dashboard</span></button>
+        <button type="button" class="nav-item" data-page="pdv"><span class="nav-short" aria-hidden="true">PDV</span><span class="nav-label">Nova Venda / PDV</span></button>
+        <button type="button" class="nav-item" data-page="pedidos"><span class="nav-short" aria-hidden="true">PE</span><span class="nav-label">Pedidos</span></button>
+        <button type="button" class="nav-item" data-page="produtos"><span class="nav-short" aria-hidden="true">PR</span><span class="nav-label">Produtos</span></button>
+        <button type="button" class="nav-item" data-page="estoque"><span class="nav-short" aria-hidden="true">ES</span><span class="nav-label">Estoque</span></button>
+        <button type="button" class="nav-item" data-page="compras"><span class="nav-short" aria-hidden="true">CO</span><span class="nav-label">Compras</span></button>
+        <button type="button" class="nav-item" data-page="caixa"><span class="nav-short" aria-hidden="true">CX</span><span class="nav-label">Caixa</span></button>
+        <button type="button" class="nav-item" data-page="recebimentos"><span class="nav-short" aria-hidden="true">R$</span><span class="nav-label">Recebimentos 360</span></button>
+        <button type="button" class="nav-item" data-page="financeiro"><span class="nav-short" aria-hidden="true">FI</span><span class="nav-label">Financeiro</span></button>
+        <button type="button" class="nav-item" data-page="delivery"><span class="nav-short" aria-hidden="true">DL</span><span class="nav-label">Delivery</span></button>
+        <button type="button" class="nav-item" data-page="clientes"><span class="nav-short" aria-hidden="true">CL</span><span class="nav-label">Clientes</span></button>
+        <button type="button" class="nav-item" data-page="fornecedores"><span class="nav-short" aria-hidden="true">FO</span><span class="nav-label">Fornecedores</span></button>
+        <button type="button" class="nav-item" data-page="relatorios"><span class="nav-short" aria-hidden="true">RE</span><span class="nav-label">Relatórios</span></button>
+        <button type="button" class="nav-item ai-nav" data-page="ia"><span class="nav-short" aria-hidden="true">IA</span><span class="nav-label">NEXO IA</span></button>
+        <button type="button" class="nav-item" data-page="integracoes"><span class="nav-short" aria-hidden="true">IN</span><span class="nav-label">Integrações</span></button>
+        <button type="button" class="nav-item" data-page="suporte"><span class="nav-short" aria-hidden="true">SU</span><span class="nav-label">Licença e Suporte</span></button>
       </nav>
       <div class="sidebar-footer">
-        <span class="status-dot ok"></span> Operacional
+        <span class="status-dot ok" aria-hidden="true"></span><span class="sidebar-status-label">Operacional</span>
       </div>
     </aside>
 
-    <main class="main">
+    <main class="main" id="workspace">
       <header class="topbar">
-        <div>
-          <h1 id="pageTitle">Dashboard</h1>
+        <div class="page-heading">
+          <h1 id="pageTitle" tabindex="-1">Dashboard</h1>
           <p id="pageSubtitle">Visão executiva e saúde operacional do negócio</p>
         </div>
         <div class="top-actions">
-          <button class="search-btn" id="globalSearch">Buscar <kbd>Ctrl K</kbd></button>
-          <button class="icon-btn" aria-label="Notificações">3</button>
-          <div class="user-chip"><span class="avatar">AD</span><span><strong>Administrador</strong><small>Conta NEXO</small></span></div>
+          <button type="button" class="search-btn" id="globalSearch" aria-haspopup="dialog" aria-expanded="false">Buscar <kbd>Ctrl K</kbd></button>
+          <button type="button" class="icon-btn" aria-label="3 notificações"><span aria-hidden="true">3</span></button>
+          <div class="user-chip" aria-label="Usuário atual: Administrador">
+            <span class="avatar" aria-hidden="true">AD</span>
+            <span><strong>Administrador</strong><small>Conta NEXO</small></span>
+          </div>
         </div>
       </header>
 
-      <section id="page-dashboard" class="page active">
-        <div class="kpi-grid">
+      <section id="page-dashboard" class="page active" aria-labelledby="pageTitle">
+        <div class="kpi-grid" aria-label="Indicadores principais">
           <article class="kpi blue"><span>Vendas hoje</span><strong>R$ 12.450,90</strong><small>+18,7% vs ontem</small></article>
           <article class="kpi green"><span>Recebido hoje</span><strong>R$ 10.984,40</strong><small>R$ 1.466,50 a conciliar</small></article>
           <article class="kpi amber"><span>Pedidos</span><strong>186</strong><small>Ticket médio R$ 66,94</small></article>
@@ -60,17 +75,17 @@
 
         <div class="dashboard-grid">
           <article class="panel chart-panel span-2">
-            <div class="panel-head"><div><h2>Faturamento × Recebimentos</h2><p>Últimos 7 dias</p></div><button class="ghost">7 dias</button></div>
-            <div class="bars" aria-label="Gráfico ilustrativo">
-              <div class="bar-group"><i style="height:42%"></i><b style="height:36%"></b><span>Seg</span></div>
-              <div class="bar-group"><i style="height:56%"></i><b style="height:48%"></b><span>Ter</span></div>
-              <div class="bar-group"><i style="height:49%"></i><b style="height:43%"></b><span>Qua</span></div>
-              <div class="bar-group"><i style="height:68%"></i><b style="height:60%"></b><span>Qui</span></div>
-              <div class="bar-group"><i style="height:78%"></i><b style="height:71%"></b><span>Sex</span></div>
-              <div class="bar-group"><i style="height:72%"></i><b style="height:64%"></b><span>Sáb</span></div>
-              <div class="bar-group"><i style="height:88%"></i><b style="height:80%"></b><span>Dom</span></div>
+            <div class="panel-head"><div><h2>Faturamento × Recebimentos</h2><p>Últimos 7 dias</p></div><span class="range-chip">7 dias</span></div>
+            <div class="bars" role="img" aria-label="Gráfico demonstrativo dos últimos sete dias: faturamento maior que recebimentos em todos os dias.">
+              <div class="bar-group" aria-hidden="true"><i class="h42"></i><b class="h36"></b><span>Seg</span></div>
+              <div class="bar-group" aria-hidden="true"><i class="h56"></i><b class="h48"></b><span>Ter</span></div>
+              <div class="bar-group" aria-hidden="true"><i class="h49"></i><b class="h43"></b><span>Qua</span></div>
+              <div class="bar-group" aria-hidden="true"><i class="h68"></i><b class="h60"></b><span>Qui</span></div>
+              <div class="bar-group" aria-hidden="true"><i class="h78"></i><b class="h71"></b><span>Sex</span></div>
+              <div class="bar-group" aria-hidden="true"><i class="h72"></i><b class="h64"></b><span>Sáb</span></div>
+              <div class="bar-group" aria-hidden="true"><i class="h88"></i><b class="h80"></b><span>Dom</span></div>
             </div>
-            <div class="legend"><span><i class="legend-dot blue-dot"></i> Faturamento</span><span><i class="legend-dot green-dot"></i> Recebido</span></div>
+            <div class="legend"><span><i class="legend-dot blue-dot" aria-hidden="true"></i> Faturamento</span><span><i class="legend-dot green-dot" aria-hidden="true"></i> Recebido</span></div>
           </article>
 
           <article class="panel health-panel">
@@ -86,7 +101,7 @@
           </article>
 
           <article class="panel receipts-panel">
-            <div class="panel-head"><div><h2>Recebimentos 360</h2><p>O que vendeu x o que realmente entrou</p></div></div>
+            <div class="panel-head"><div><h2>Recebimentos 360</h2><p>O que vendeu × o que realmente entrou</p></div></div>
             <div class="receipt-row"><span>Dinheiro</span><strong>R$ 3.420,00</strong><em class="pill ok">Liquidado</em></div>
             <div class="receipt-row"><span>PIX</span><strong>R$ 4.180,90</strong><em class="pill ok">Liquidado</em></div>
             <div class="receipt-row"><span>Cartões</span><strong>R$ 2.340,50</strong><em class="pill warn">Conciliação</em></div>
@@ -95,12 +110,12 @@
           </article>
 
           <article class="panel orders-panel">
-            <div class="panel-head"><div><h2>Pedidos recentes</h2><p>Operação atual</p></div><button class="ghost">Ver todos</button></div>
-            <div class="table-like">
-              <div><strong>#1186</strong><span>Balcão</span><span>R$ 74,90</span><em class="pill ok">Pronto</em></div>
-              <div><strong>#1185</strong><span>Delivery</span><span>R$ 93,00</span><em class="pill blue-pill">Saiu</em></div>
-              <div><strong>#1184</strong><span>Marketplace</span><span>R$ 68,50</span><em class="pill warn">Preparando</em></div>
-              <div><strong>#1183</strong><span>Balcão</span><span>R$ 31,00</span><em class="pill neutral">Entregue</em></div>
+            <div class="panel-head"><div><h2>Pedidos recentes</h2><p>Operação atual</p></div><button type="button" class="ghost" data-go="pedidos">Ver todos</button></div>
+            <div class="table-like" role="table" aria-label="Pedidos recentes">
+              <div role="row"><strong role="cell">#1186</strong><span role="cell">Balcão</span><span role="cell">R$ 74,90</span><em role="cell" class="pill ok">Pronto</em></div>
+              <div role="row"><strong role="cell">#1185</strong><span role="cell">Delivery</span><span role="cell">R$ 93,00</span><em role="cell" class="pill blue-pill">Saiu</em></div>
+              <div role="row"><strong role="cell">#1184</strong><span role="cell">Marketplace</span><span role="cell">R$ 68,50</span><em role="cell" class="pill warn">Preparando</em></div>
+              <div role="row"><strong role="cell">#1183</strong><span role="cell">Balcão</span><span role="cell">R$ 31,00</span><em role="cell" class="pill neutral">Entregue</em></div>
             </div>
           </article>
 
@@ -109,28 +124,36 @@
             <div class="insight warn-insight"><strong>Reposição</strong><p>12 produtos devem atingir o estoque mínimo nos próximos 3 dias.</p></div>
             <div class="insight"><strong>Financeiro</strong><p>R$ 2.340,50 em cartões aguardam conciliação.</p></div>
             <div class="insight"><strong>Margem</strong><p>A margem média do combo principal caiu 3,2 p.p. nesta semana.</p></div>
-            <button class="primary">Abrir NEXO IA</button>
+            <button type="button" class="primary" data-go="ia">Abrir NEXO IA</button>
           </article>
         </div>
       </section>
 
-      <section id="page-placeholder" class="page placeholder-page">
+      <section id="page-placeholder" class="page placeholder-page" aria-labelledby="placeholderTitle">
         <article class="panel placeholder-card">
           <span class="eyebrow">NEXO ERP PRO 9.8 LAB</span>
           <h2 id="placeholderTitle">Módulo</h2>
           <p id="placeholderText">Esta tela usará o mesmo Design System Visual Pro 360 e será integrada ao núcleo comercial privado após homologação.</p>
-          <div class="placeholder-actions"><button class="primary">Ação principal</button><button class="ghost">Ação secundária</button></div>
+          <div class="placeholder-actions">
+            <button type="button" class="primary" data-go="dashboard">Voltar ao Dashboard</button>
+            <button type="button" class="ghost" data-action="open-search">Buscar módulo</button>
+          </div>
         </article>
       </section>
     </main>
   </div>
 
   <div class="command" id="commandPalette" aria-hidden="true">
-    <div class="command-box">
-      <input id="commandInput" placeholder="Buscar módulo, cliente, produto ou ação…" />
-      <div class="command-results">Digite para pesquisar no NEXO ERP PRO.</div>
+    <div class="command-box" role="dialog" aria-modal="true" aria-labelledby="commandTitle">
+      <div class="command-head">
+        <strong id="commandTitle">Busca global do LAB</strong>
+        <button type="button" class="command-close" data-action="close-search" aria-label="Fechar busca">Esc</button>
+      </div>
+      <label class="sr-only" for="commandInput">Buscar módulo ou ação</label>
+      <input id="commandInput" autocomplete="off" placeholder="Buscar módulo ou ação…" aria-controls="commandResults" />
+      <div class="command-results" id="commandResults" role="listbox" aria-live="polite">Digite para pesquisar no NEXO ERP PRO.</div>
     </div>
   </div>
-  <script src="app.js"></script>
+  <div class="sr-only" id="liveRegion" aria-live="polite"></div>
 </body>
 </html>

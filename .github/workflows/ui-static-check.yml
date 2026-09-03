@@ -1,0 +1,58 @@
+name: NEXO 9.8 LAB UI Static Check
+
+on:
+  push:
+    branches: [main, 9.8-lab-hardening]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  ui-static-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - name: JavaScript syntax check
+        run: |
+          node --check ui/app.js
+          node --check ui/phase2.js
+          node --check ui/avare-data.js
+          node --check ui/phase3.js
+          node --check ui/avare-nav-guard.js
+          node --check ui/phase4.js
+          node --check ui/phase5.js
+          node --check ui/phase6.js
+          node --check ui/phase8.js
+      - name: Static security and UX sweep
+        run: node tests/ui_static_check.mjs
+      - name: Avaré local data integrity
+        run: node tests/avare_integrity_check.mjs
+      - name: Phase 4 regression
+        run: node tests/phase4_regression.mjs
+      - name: Phase 5 restaurant regression
+        run: node tests/phase5_restaurant_regression.mjs
+      - name: Phase 6 driver center regression
+        run: node tests/phase6_driver_regression.mjs
+      - name: Phase 8 product commercial regression
+        run: node tests/phase8_product_regression.mjs
+      - name: 16 module regression
+        run: node tests/regression_16_modules.mjs
+      - name: SQLite contract syntax
+        run: python3 tests/sql_contract_check.py
+      - name: Restaurant SQLite schema
+        run: python3 tests/restaurant_sql_check.py
+      - name: Driver catalog SQLite schema
+        run: python3 tests/driver_catalog_sql_check.py
+      - name: Phase 7 waiter/catalog SQLite
+        run: python3 tests/waiter_catalog_sql_check.py
+      - name: Phase 8 product commercial SQLite
+        run: python3 tests/product_commercial_sql_check.py
