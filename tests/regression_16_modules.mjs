@@ -43,6 +43,8 @@ check('NEXO Intelligence permanece dentro de IA/Suporte/Dashboard',()=>{assert.m
 check('NEXO Fiscal permanece opcional dentro de Integrações/Produtos',()=>{assert.match(guard,/phase11\.js/);assert.doesNotMatch(html,/data-page="fiscal"/)});
 check('NEXO Aprender permanece dentro de Suporte',()=>{assert.match(guard,/phase12\.js/);assert.doesNotMatch(html,/data-page="aprender"/)});
 check('Delivery Enterprise amplia Delivery sem menu paralelo',()=>{assert.match(guard,/phase13\.js/);assert.doesNotMatch(html,/data-page="mapa"/)});
+check('CRM Operacional amplia Clientes sem menu paralelo',()=>{assert.match(guard,/phase14\.js/);assert.doesNotMatch(html,/data-page="crm"/)});
+check('Pesagem amplia Produtos/Estoque sem menu paralelo',()=>{assert.match(guard,/phase15\.js/);assert.doesNotMatch(html,/data-page="pesagem"/)});
 
 let failed=0;
 for(const [name,ok,msg] of checks){if(ok)console.log(`PASS  ${name}`);else{failed++;console.error(`FAIL  ${name}: ${msg}`)}}
@@ -54,3 +56,5 @@ await import('./phase10_intelligence_regression.mjs');
 await import('./phase11_fiscal_regression.mjs');
 await import('./phase12_aprender_regression.mjs');
 await import('./phase13_delivery_enterprise_regression.mjs');
+await import('./phase14_customer_regression.mjs');
+await import('./phase15_weighing_regression.mjs');
