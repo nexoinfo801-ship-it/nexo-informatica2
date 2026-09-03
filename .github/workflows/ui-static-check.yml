@@ -28,7 +28,10 @@ jobs:
           node --check ui/avare-data.js
           node --check ui/phase3.js
           node --check ui/avare-nav-guard.js
+          node --check ui/phase4.js
       - name: Static security and UX sweep
         run: node tests/ui_static_check.mjs
       - name: Avaré local data integrity
         run: node tests/avare_integrity_check.mjs
+      - name: Phase 4 regression
+        run: node tests/phase4_regression.mjs
