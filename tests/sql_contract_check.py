@@ -1,5 +1,6 @@
 from pathlib import Path
 import sqlite3
+import runpy
 
 root=Path(__file__).resolve().parents[1]
 files=[root/'db'/'avare_public_seed.sql',root/'db'/'9_8_lab_domain_schema.sql']
@@ -21,3 +22,6 @@ try:
     print('PASS  schemas SQLite carregados em banco temporário')
 finally:
     conn.close()
+
+# O workflow já executa este gate; encadeamos o contrato Delivery Pro sem alterar o pipeline Actions.
+runpy.run_path(str(root/'tests'/'delivery_pro_sql_check.py'),run_name='__main__')
