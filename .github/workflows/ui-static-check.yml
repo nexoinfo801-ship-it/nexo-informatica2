@@ -35,3 +35,7 @@ jobs:
         run: node tests/avare_integrity_check.mjs
       - name: Phase 4 regression
         run: node tests/phase4_regression.mjs
+      - name: 16 module regression
+        run: node tests/regression_16_modules.mjs
+      - name: SQLite contract syntax
+        run: python3 tests/sql_contract_check.py
