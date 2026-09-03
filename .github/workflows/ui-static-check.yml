@@ -21,5 +21,7 @@ jobs:
         with:
           node-version: '22'
           package-manager-cache: false
+      - name: JavaScript syntax check
+        run: node --check ui/app.js
       - name: Static security and UX sweep
         run: node tests/ui_static_check.mjs
