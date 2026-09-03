@@ -25,5 +25,7 @@ jobs:
         run: |
           node --check ui/app.js
           node --check ui/phase2.js
+          node --check ui/avare-data.js
+          node --check ui/phase3.js
       - name: Static security and UX sweep
         run: node tests/ui_static_check.mjs
