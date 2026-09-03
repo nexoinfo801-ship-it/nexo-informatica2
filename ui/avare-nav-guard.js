@@ -8,12 +8,12 @@ if(action){
 }
 
 // Bootstrap local de extensões do LAB. Mantém o index estável e carrega somente arquivos self/CSP-safe.
-for(const phase of [8,9,10,11,12,13,14,15]){
-  if(document.querySelector(`script[data-phase${phase}-loader]`))continue;
-  const script=document.createElement('script');
-  script.src=`phase${phase}.js`;
-  script.async=false;
-  script.dataset[`phase${phase}Loader`]='true';
-  document.head.append(script);
-}
+if(!document.querySelector('script[data-phase8-loader]')){const script=document.createElement('script');script.src='phase8.js';script.async=false;script.dataset.phase8Loader='true';document.head.append(script)}
+if(!document.querySelector('script[data-phase9-loader]')){const script=document.createElement('script');script.src='phase9.js';script.async=false;script.dataset.phase9Loader='true';document.head.append(script)}
+if(!document.querySelector('script[data-phase10-loader]')){const script=document.createElement('script');script.src='phase10.js';script.async=false;script.dataset.phase10Loader='true';document.head.append(script)}
+if(!document.querySelector('script[data-phase11-loader]')){const script=document.createElement('script');script.src='phase11.js';script.async=false;script.dataset.phase11Loader='true';document.head.append(script)}
+if(!document.querySelector('script[data-phase12-loader]')){const script=document.createElement('script');script.src='phase12.js';script.async=false;script.dataset.phase12Loader='true';document.head.append(script)}
+if(!document.querySelector('script[data-phase13-loader]')){const script=document.createElement('script');script.src='phase13.js';script.async=false;script.dataset.phase13Loader='true';document.head.append(script)}
+if(!document.querySelector('script[data-phase14-loader]')){const script=document.createElement('script');script.src='phase14.js';script.async=false;script.dataset.phase14Loader='true';document.head.append(script)}
+if(!document.querySelector('script[data-phase15-loader]')){const script=document.createElement('script');script.src='phase15.js';script.async=false;script.dataset.phase15Loader='true';document.head.append(script)}
 })();
