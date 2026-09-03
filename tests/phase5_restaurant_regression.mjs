@@ -25,11 +25,16 @@ check('abas Restaurante presentes',()=>{for(const term of ['Salão','Garçom Mob
 check('fluxo de mesa completo',()=>{for(const s of ['FREE','OCCUPIED','ORDER_SENT','PREPARING','READY','SERVING','CLOSING'])assert.match(p5,new RegExp(s))});
 check('roteamento Cozinha/Bar',()=>{assert.match(p5,/sector:'KITCHEN'/);assert.match(p5,/sector:'BAR'/)});
 check('KDS possui ciclo operacional',()=>{for(const s of ['NEW','ACCEPTED','PREPARING','READY','DELIVERED'])assert.match(p5,new RegExp(s))});
+check('tickets entregues levam mesa a Servindo',()=>assert.match(p5,/every\(t=>t\.status==='DELIVERED'\)\)table\.status='SERVING'/));
 check('envio garçom cria tickets separados',()=>{assert.match(p5,/K-212/);assert.match(p5,/B-091/);assert.match(p5,/roteado para Cozinha e Bar/)});
 check('pedido garçom é idempotente na sessão',()=>assert.match(p5,/if\(waiterOrderSent\)return/));
 check('modificadores têm mínimo e máximo',()=>{assert.match(p5,/min:1,max:1/);assert.match(p5,/min:1,max:3/)});
-check('modificadores suportam adicional/substituição',()=>{assert.match(p5,/Carne adicional/);assert.match(p5,/Trocar ovo por carne/)});
+check('modificadores bloqueiam acima do máximo',()=>assert.match(p5,/modifierCount\(group\)>=group\.max/));
+check('envio valida mínimo/máximo',()=>{assert.match(p5,/function validateModifierSelection/);assert.match(p5,/const validation=validateModifierSelection\(\)/)});
+check('modificadores possuem cota grátis',()=>assert.match(p5,/freeQuota/));
+check('modificadores suportam adicional/substituição',()=>{assert.match(p5,/Carne adicional/);assert.match(p5,/Trocar ovo por carne/);assert.match(schema,/can_substitute/)});
 check('impressoras por quatro destinos',()=>{for(const x of ['CAIXA','COZINHA','BAR','EXPEDIÇÃO'])assert.match(p5,new RegExp(x))});
+check('impressora não finge teste físico',()=>{assert.match(p5,/CAIXA'.*state:'CONFIGURED'/);assert.match(p5,/teste físico ainda pendente/)});
 check('fila de impressão alvo não perde falha silenciosa',()=>assert.match(p5,/QUEUED → PRINTING → PRINTED \/ FAILED/));
 check('cardápio temático com preço fixo',()=>{assert.match(p5,/Almoço Mexicano/);assert.match(doc,/preço fixo/)});
 check('Ficha Técnica em Produtos',()=>{assert.match(p5,/Ficha Técnica \/ Composição/);assert.match(p5,/page-produtos/)});
@@ -38,6 +43,7 @@ check('Perdas em Estoque',()=>{assert.match(p5,/Perdas e Desperdício/);assert.m
 check('Perdas possuem custo e responsável',()=>{assert.match(p5,/unitCost/);assert.match(p5,/responsible/)});
 check('Relatório estendido inclui cozinha/bar/delivery',()=>{for(const x of ['Cozinha','Bar','Delivery','Perdas','Conferência'])assert.match(p5,new RegExp(x))});
 check('Integrações usam maturidade explícita',()=>{for(const s of ['IMPLEMENTED','CONFIGURED','TESTED','HOMOLOGATED','NOT_CONFIGURED'])assert.match(p5,new RegExp(s))});
+check('backup não é marcado Testado só por regressão estática',()=>assert.match(p5,/Backup diário'.*state:'IMPLEMENTED'/));
 check('nenhuma operação pública persiste dados reais',()=>assert.match(doc,/nenhuma venda\/comanda é persistida/));
 
 const requiredTables=['restaurant_table','restaurant_order','restaurant_order_item','product_modifier_group','product_modifier_option','restaurant_order_item_modifier','production_ticket','printer_route','print_job','product_recipe','product_recipe_item','loss_event','thematic_menu_event','thematic_menu_product','restaurant_operation_audit'];
