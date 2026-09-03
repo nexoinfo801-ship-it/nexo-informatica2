@@ -8,25 +8,18 @@ if(action){
 }
 
 // Bootstrap local de extensões do LAB. Mantém o index estável e carrega somente arquivos self/CSP-safe.
-if(!document.querySelector('script[data-phase8-loader]')){
+const load=(src,key)=>{
+  if(document.querySelector(`script[data-${key}-loader]`))return;
   const script=document.createElement('script');
-  script.src='phase8.js';
+  script.src=src;
   script.async=false;
-  script.dataset.phase8Loader='true';
+  script.dataset[`${key}Loader`]='true';
   document.head.append(script);
-}
-if(!document.querySelector('script[data-phase9-loader]')){
-  const script=document.createElement('script');
-  script.src='phase9.js';
-  script.async=false;
-  script.dataset.phase9Loader='true';
-  document.head.append(script);
-}
-if(!document.querySelector('script[data-phase10-loader]')){
-  const script=document.createElement('script');
-  script.src='phase10.js';
-  script.async=false;
-  script.dataset.phase10Loader='true';
-  document.head.append(script);
-}
+};
+load('phase8.js','phase8');
+load('phase9.js','phase9');
+load('phase10.js','phase10');
+load('phase11.js','phase11');
+load('phase12.js','phase12');
+load('phase13.js','phase13');
 })();
