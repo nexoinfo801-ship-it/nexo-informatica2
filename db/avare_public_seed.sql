@@ -70,7 +70,7 @@ INSERT OR REPLACE INTO public_supplier_candidate
 ('AV-CAR-004','carnes','Santo Beef Açougue em Avaré','R. Mato Grosso, 1274 - Centro, Avaré - SP','(14) 3731-2345','candidate','2026-09-03'),
 ('AV-CAR-005','carnes','Armazém da Carne','R. Jânio Quadros, 681 - Jardim São Paulo, Avaré - SP, 18705-550','(14) 99735-5683','candidate','2026-09-03'),
 ('AV-ENT-001','entrega','PK2U Tecnologia e Serviços de Entrega','R. Óleo, 20 - Parque Industrial Jurumirim, Avaré - SP, 18704-070','(14) 3448-1137','candidate','2026-09-03'),
-('AV-ENT-002','entrega','Entregas RR','R. Acre, 1951 - Santana, Avaré - SP, 18700-260','(14) 99819-3997','candidate','2026-09-03'),
+('AV-ENT-002','entrega','RR EXPRESS','R. Acre, 1951 - Centro, Avaré - SP, 18700-260','(14) 93300-4625','candidate','2026-09-03'),
 ('AV-ENT-003','entrega','Transportadora Corrêa','R. Sergipe, 1043 - Centro, Avaré - SP, 18700-050','(14) 3732-2511','candidate','2026-09-03'),
 ('AV-ENT-004','entrega','Rodonaves Avaré','Av. Dr. Plínio de Almeida Fagundes, 714 - Jardim Paineiras, Avaré - SP, 18705-770','(14) 3514-0800','candidate','2026-09-03'),
 ('AV-ENT-005','entrega','Transportadora Edjufer','R. Lúcio Dias da Fonseca, 71 - Altos da Boa Vista, Avaré - SP, 18708-620','(14) 3731-2018','candidate','2026-09-03'),
