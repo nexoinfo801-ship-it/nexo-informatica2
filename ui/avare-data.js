@@ -42,7 +42,7 @@ window.NEXO_AVARE_PUBLIC_DATA=Object.freeze({
     {id:'AV-CAR-005',category:'carnes',name:'Armazém da Carne',address:'R. Jânio Quadros, 681 - Jardim São Paulo, Avaré - SP, 18705-550',phone:'(14) 99735-5683',status:'candidato'},
 
     {id:'AV-ENT-001',category:'entrega',name:'PK2U Tecnologia e Serviços de Entrega',address:'R. Óleo, 20 - Parque Industrial Jurumirim, Avaré - SP, 18704-070',phone:'(14) 3448-1137',status:'candidato'},
-    {id:'AV-ENT-002',category:'entrega',name:'Entregas RR',address:'R. Acre, 1951 - Santana, Avaré - SP, 18700-260',phone:'(14) 99819-3997',status:'candidato'},
+    {id:'AV-ENT-002',category:'entrega',name:'RR EXPRESS',address:'R. Acre, 1951 - Centro, Avaré - SP, 18700-260',phone:'(14) 93300-4625',status:'candidato'},
     {id:'AV-ENT-003',category:'entrega',name:'Transportadora Corrêa',address:'R. Sergipe, 1043 - Centro, Avaré - SP, 18700-050',phone:'(14) 3732-2511',status:'candidato'},
     {id:'AV-ENT-004',category:'entrega',name:'Rodonaves Avaré',address:'Av. Dr. Plínio de Almeida Fagundes, 714 - Jardim Paineiras, Avaré - SP, 18705-770',phone:'(14) 3514-0800',status:'candidato'},
     {id:'AV-ENT-005',category:'entrega',name:'Transportadora Edjufer',address:'R. Lúcio Dias da Fonseca, 71 - Altos da Boa Vista, Avaré - SP, 18708-620',phone:'(14) 3731-2018',status:'candidato'},
