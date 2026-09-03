@@ -25,3 +25,4 @@ finally:
 
 runpy.run_path(str(root/'tests'/'delivery_pro_sql_check.py'),run_name='__main__')
 runpy.run_path(str(root/'tests'/'intelligence_sql_check.py'),run_name='__main__')
+runpy.run_path(str(root/'tests'/'fiscal_aprender_delivery_sql_check.py'),run_name='__main__')
