@@ -34,13 +34,11 @@ const dailyReport=Object.freeze({
  cash:{opening:300.00,cashSales:3420.00,supplies:100.00,withdrawals:450.00,expected:3370.00}
 });
 
-let stockAlertAcknowledged=false;
-
 function available(item){return item.physical-item.reserved}
 function projected(item){return available(item)+item.onOrder}
 function alertItems(){return supplyItems.filter(item=>available(item)<=item.min)}
 function alertTone(item){return available(item)<=item.safety?'danger':'warn'}
-function suggestionQty(item){return Math.max(0,item.max-projected(item))}
+function suggestionQty(item){return available(item)<=item.min?Math.max(0,item.max-projected(item)):0}
 
 function ensureStyles(){
  if(document.querySelector('link[data-phase4-css]'))return;
@@ -77,7 +75,7 @@ function appendSupplyModule(){
   row.append(info,n('b',avail<=item.min?'warn-text':'ok-text',String(avail)),n('span','',`${item.min} / ${item.max}`),n('span','',String(item.onOrder)),n('span','',String(projected(item))),status,action);rows.append(row);
  });
  card.append(rows);
- const rule=n('div','p4-rule');rule.append(n('strong','', 'Regra do LAB'),n('span','', 'Alerta quando disponível ≤ mínimo; crítico quando disponível ≤ estoque de segurança. Quantidade sugerida considera o que já está em trânsito.'));
+ const rule=n('div','p4-rule');rule.append(n('strong','', 'Regra do LAB'),n('span','', 'Alerta quando disponível ≤ mínimo; crítico quando disponível ≤ estoque de segurança. Sugestão de compra só é aberta quando o item está em atenção e considera o que já está em trânsito.'));
  wrap.append(metrics,card,rule);page.append(wrap);
 }
 
@@ -124,7 +122,7 @@ function setResult(id,message,tone='neutral'){const el=document.getElementById(i
 document.addEventListener('click',event=>{
  const target=event.target.closest('[data-p4-action]');if(!target)return;const action=target.dataset.p4Action;const value=target.dataset.value;
  if(action==='go-stock'){window.openPage?.('estoque',{focusHeading:true})}
- else if(action==='ack-stock-alert'){stockAlertAcknowledged=true;document.getElementById('p4GlobalStockAlert')?.remove();announce('Alerta de estoque reconhecido nesta sessão do LAB.')}
+ else if(action==='ack-stock-alert'){document.getElementById('p4GlobalStockAlert')?.remove();announce('Alerta de estoque reconhecido nesta sessão do LAB.')}
  else if(action==='prepare-supply'){const item=supplyItems.find(x=>x.sku===value);if(item){const qty=suggestionQty(item);announce(`Rascunho de suprimento preparado para ${item.name}: ${qty} unidade(s). Nada foi gravado.`)}}
  else if(action==='backup-run')setResult('p4BackupResult','Backup LAB simulado: criação → quick_check → SHA-256 → histórico. Nenhum arquivo real foi alterado.','ok')
  else if(action==='backup-restore-test')setResult('p4BackupResult','Teste de restauração LAB simulado em banco isolado; produção exige fechamento/controlador exclusivo do banco.','ok')
