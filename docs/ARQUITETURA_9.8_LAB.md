@@ -6,14 +6,21 @@
 - 9.8 RC = candidata após regressão completa.
 - 9.8 FINAL = somente após teste físico Windows.
 
+## Estado atual da camada pública
+- Dashboard executivo implementado.
+- PDV, Recebimentos 360, Financeiro e Estoque possuem telas operacionais demonstrativas.
+- Nenhuma dessas telas persiste dados reais nesta camada pública.
+- Última varredura: 47/47 PASS + sintaxe JavaScript PASS.
+
 ## Camadas
 ### Renderer/UI
 - Design System Visual Pro 360.
 - Sem novos handlers inline.
 - Event delegation.
-- DOM rendering incremental para tabelas grandes.
+- DOM seguro sem `innerHTML`/`insertAdjacentHTML` para resultados dinâmicos.
 - Pesquisa global e atalhos de teclado.
 - Estados: loading, vazio, erro, offline, somente leitura.
+- CSP pública restritiva; CSP comercial será ajustada às integrações reais.
 
 ### Preload
 - API mínima via contextBridge.
@@ -69,6 +76,11 @@
 - Marketplace permanece repasse até liquidação.
 - Fiado permanece contas a receber até baixa.
 - Cancelamento/retificação deve ser transacional e auditável.
+
+## Regra de estoque obrigatória
+- Disponível = físico - reservado.
+- Em trânsito é informativo/previsão e não aumenta o físico antes do recebimento.
+- Cancelamentos devem reverter reservas/movimentos na mesma transação.
 
 ## NEXO IA
 - Pode consultar e explicar indicadores.
