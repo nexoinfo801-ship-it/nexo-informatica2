@@ -32,6 +32,7 @@ check('sem insertAdjacentHTML',()=>assert.doesNotMatch(allJs,/insertAdjacentHTML
 check('sem eval',()=>assert.doesNotMatch(allJs,/\beval\s*\(/));
 check('sem new Function',()=>assert.doesNotMatch(allJs,/new\s+Function\s*\(/));
 check('sem document.write',()=>assert.doesNotMatch(allJs,/document\.write\s*\(/));
+check('sem marcador temporário appendDummy',()=>assert.doesNotMatch(phase2,/appendDummy/));
 check('event delegation presente',()=>assert.match(allJs,/document\.addEventListener\('click'/));
 check('busca normaliza acentos',()=>assert.match(js,/normalize\('NFD'\)/));
 check('focus-visible presente',()=>assert.match(css,/:focus-visible/));
@@ -54,8 +55,11 @@ check('Clientes CRM operacional presente',()=>assert.match(phase2,/function buil
 check('PDV não persiste venda real',()=>assert.match(js,/Integração real permanece bloqueada no LAB/));
 check('Estoque calcula disponível por físico menos reservado',()=>assert.match(js,/item\.physical\s*-\s*item\.reserved/));
 check('Recebimentos mantém filtro de pendências',()=>assert.match(js,/receiptFilter==='pendente'/));
+check('Pedidos em atenção excluem entregues',()=>assert.match(phase2,/orderFilter==='atrasados'&&o\.status!=='entregue'/));
+check('Margem usa limiar único e nomeado',()=>{assert.match(phase2,/const LOW_MARGIN=55/);assert.match(phase2,/margin<LOW_MARGIN/);assert.match(phase2,/Abaixo de \$\{LOW_MARGIN\}%/)});
 check('Compra LAB não altera estoque real',()=>assert.match(phase2,/estoque real não foi alterado/));
 check('Caixa esperado separa fundo, dinheiro, suprimento e sangria',()=>assert.match(phase2,/cashState\.opening\+cashState\.cashSales\+cashState\.supplies-cashState\.withdrawals/));
+check('Sangria valida valor não positivo',()=>assert.match(phase2,/amount<=0\|\|expectedCash\(\)-amount<0/));
 check('CRM público não contém email ou telefone',()=>{assert.doesNotMatch(phase2,/@[a-z0-9.-]+\.[a-z]{2,}/i);assert.doesNotMatch(phase2,/\b\d{2}\s?9?\d{4}[-\s]?\d{4}\b/)});
 check('fallback evita módulo em branco',()=>assert.match(phase2,/Falha de montagem detectada/));
 check('badges críticos têm estilo',()=>assert.match(phase2Css,/\.pill\.danger/));
