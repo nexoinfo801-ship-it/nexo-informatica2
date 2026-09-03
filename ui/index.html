@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NEXO ERP PRO 9.8 LAB</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">N</div>
+        <div><strong>NEXO</strong><span>ERP PRO</span></div>
+      </div>
+      <div class="lab-badge">9.8 LAB</div>
+      <nav class="nav" aria-label="Navegação principal">
+        <button class="nav-item active" data-page="dashboard">Dashboard</button>
+        <button class="nav-item" data-page="pdv">Nova Venda / PDV</button>
+        <button class="nav-item" data-page="pedidos">Pedidos</button>
+        <button class="nav-item" data-page="produtos">Produtos</button>
+        <button class="nav-item" data-page="estoque">Estoque</button>
+        <button class="nav-item" data-page="compras">Compras</button>
+        <button class="nav-item" data-page="caixa">Caixa</button>
+        <button class="nav-item" data-page="recebimentos">Recebimentos 360</button>
+        <button class="nav-item" data-page="financeiro">Financeiro</button>
+        <button class="nav-item" data-page="delivery">Delivery</button>
+        <button class="nav-item" data-page="clientes">Clientes</button>
+        <button class="nav-item" data-page="fornecedores">Fornecedores</button>
+        <button class="nav-item" data-page="relatorios">Relatórios</button>
+        <button class="nav-item ai-nav" data-page="ia">NEXO IA</button>
+        <button class="nav-item" data-page="integracoes">Integrações</button>
+        <button class="nav-item" data-page="suporte">Licença e Suporte</button>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="status-dot ok"></span> Operacional
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1 id="pageTitle">Dashboard</h1>
+          <p id="pageSubtitle">Visão executiva e saúde operacional do negócio</p>
+        </div>
+        <div class="top-actions">
+          <button class="search-btn" id="globalSearch">Buscar <kbd>Ctrl K</kbd></button>
+          <button class="icon-btn" aria-label="Notificações">3</button>
+          <div class="user-chip"><span class="avatar">AD</span><span><strong>Administrador</strong><small>Conta NEXO</small></span></div>
+        </div>
+      </header>
+
+      <section id="page-dashboard" class="page active">
+        <div class="kpi-grid">
+          <article class="kpi blue"><span>Vendas hoje</span><strong>R$ 12.450,90</strong><small>+18,7% vs ontem</small></article>
+          <article class="kpi green"><span>Recebido hoje</span><strong>R$ 10.984,40</strong><small>R$ 1.466,50 a conciliar</small></article>
+          <article class="kpi amber"><span>Pedidos</span><strong>186</strong><small>Ticket médio R$ 66,94</small></article>
+          <article class="kpi red"><span>Alertas</span><strong>7</strong><small>3 estoque • 2 caixa • 2 financeiro</small></article>
+        </div>
+
+        <div class="dashboard-grid">
+          <article class="panel chart-panel span-2">
+            <div class="panel-head"><div><h2>Faturamento × Recebimentos</h2><p>Últimos 7 dias</p></div><button class="ghost">7 dias</button></div>
+            <div class="bars" aria-label="Gráfico ilustrativo">
+              <div class="bar-group"><i style="height:42%"></i><b style="height:36%"></b><span>Seg</span></div>
+              <div class="bar-group"><i style="height:56%"></i><b style="height:48%"></b><span>Ter</span></div>
+              <div class="bar-group"><i style="height:49%"></i><b style="height:43%"></b><span>Qua</span></div>
+              <div class="bar-group"><i style="height:68%"></i><b style="height:60%"></b><span>Qui</span></div>
+              <div class="bar-group"><i style="height:78%"></i><b style="height:71%"></b><span>Sex</span></div>
+              <div class="bar-group"><i style="height:72%"></i><b style="height:64%"></b><span>Sáb</span></div>
+              <div class="bar-group"><i style="height:88%"></i><b style="height:80%"></b><span>Dom</span></div>
+            </div>
+            <div class="legend"><span><i class="legend-dot blue-dot"></i> Faturamento</span><span><i class="legend-dot green-dot"></i> Recebido</span></div>
+          </article>
+
+          <article class="panel health-panel">
+            <div class="panel-head"><div><h2>Saúde Operacional</h2><p>Diagnóstico em tempo real</p></div><span class="pill ok">Saudável</span></div>
+            <ul class="health-list">
+              <li><span>Banco de dados</span><strong class="ok-text">OK</strong></li>
+              <li><span>Backup</span><strong class="ok-text">Hoje 20:12</strong></li>
+              <li><span>Estoque</span><strong class="warn-text">3 alertas</strong></li>
+              <li><span>Recebimentos</span><strong class="warn-text">2 pendências</strong></li>
+              <li><span>Integrações</span><strong class="danger-text">1 atenção</strong></li>
+              <li><span>Licença</span><strong class="ok-text">Ativa</strong></li>
+            </ul>
+          </article>
+
+          <article class="panel receipts-panel">
+            <div class="panel-head"><div><h2>Recebimentos 360</h2><p>O que vendeu x o que realmente entrou</p></div></div>
+            <div class="receipt-row"><span>Dinheiro</span><strong>R$ 3.420,00</strong><em class="pill ok">Liquidado</em></div>
+            <div class="receipt-row"><span>PIX</span><strong>R$ 4.180,90</strong><em class="pill ok">Liquidado</em></div>
+            <div class="receipt-row"><span>Cartões</span><strong>R$ 2.340,50</strong><em class="pill warn">Conciliação</em></div>
+            <div class="receipt-row"><span>Marketplaces</span><strong>R$ 812,00</strong><em class="pill warn">Repasse</em></div>
+            <div class="receipt-row"><span>Fiado</span><strong>R$ 231,00</strong><em class="pill neutral">A receber</em></div>
+          </article>
+
+          <article class="panel orders-panel">
+            <div class="panel-head"><div><h2>Pedidos recentes</h2><p>Operação atual</p></div><button class="ghost">Ver todos</button></div>
+            <div class="table-like">
+              <div><strong>#1186</strong><span>Balcão</span><span>R$ 74,90</span><em class="pill ok">Pronto</em></div>
+              <div><strong>#1185</strong><span>Delivery</span><span>R$ 93,00</span><em class="pill blue-pill">Saiu</em></div>
+              <div><strong>#1184</strong><span>Marketplace</span><span>R$ 68,50</span><em class="pill warn">Preparando</em></div>
+              <div><strong>#1183</strong><span>Balcão</span><span>R$ 31,00</span><em class="pill neutral">Entregue</em></div>
+            </div>
+          </article>
+
+          <article class="panel ai-panel">
+            <div class="panel-head"><div><h2>NEXO IA</h2><p>Insights locais e explicáveis</p></div><span class="pill ai">Assistente</span></div>
+            <div class="insight warn-insight"><strong>Reposição</strong><p>12 produtos devem atingir o estoque mínimo nos próximos 3 dias.</p></div>
+            <div class="insight"><strong>Financeiro</strong><p>R$ 2.340,50 em cartões aguardam conciliação.</p></div>
+            <div class="insight"><strong>Margem</strong><p>A margem média do combo principal caiu 3,2 p.p. nesta semana.</p></div>
+            <button class="primary">Abrir NEXO IA</button>
+          </article>
+        </div>
+      </section>
+
+      <section id="page-placeholder" class="page placeholder-page">
+        <article class="panel placeholder-card">
+          <span class="eyebrow">NEXO ERP PRO 9.8 LAB</span>
+          <h2 id="placeholderTitle">Módulo</h2>
+          <p id="placeholderText">Esta tela usará o mesmo Design System Visual Pro 360 e será integrada ao núcleo comercial privado após homologação.</p>
+          <div class="placeholder-actions"><button class="primary">Ação principal</button><button class="ghost">Ação secundária</button></div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <div class="command" id="commandPalette" aria-hidden="true">
+    <div class="command-box">
+      <input id="commandInput" placeholder="Buscar módulo, cliente, produto ou ação…" />
+      <div class="command-results">Digite para pesquisar no NEXO ERP PRO.</div>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
