@@ -8,16 +8,29 @@ Este repositório contém **somente a camada visual, componentes de interface e 
 - O código Electron/ASAR comercial continua fora deste repositório.
 - O Visual Pro 360 será portado para a aplicação privada somente após testes no LAB.
 
-## Objetivos do 9.8 LAB
-- Visual Pro 360 consistente em todas as telas.
-- Dashboard executivo com Vendas, Recebimentos, Pedidos, Alertas e Saúde Operacional.
-- PDV com foco em velocidade, teclado/leitor e finalização clara.
-- Recebimentos 360 separado do caixa físico.
-- Financeiro com aging, contas, conciliação e DRE.
-- Estoque com físico, reservado, disponível, planejado, em trânsito e projetado.
-- NEXO IA com insights e confirmação humana para ações operacionais.
-- Melhoria progressiva de CSP, event delegation e IPC assíncrono.
-- Backup SQLite consistente e diagnóstico operacional.
+## Status atual do 9.8 LAB
+Implementado na branch `9.8-lab-hardening`:
+- Dashboard executivo.
+- PDV demonstrativo com busca, carrinho, quantidades, pagamentos e finalização segura sem persistência.
+- Recebimentos 360 com bruto, líquido, estágio e agenda de liquidação.
+- Financeiro com aging, fluxo projetado e compromissos.
+- Estoque com físico, reservado, disponível e em trânsito.
+- Busca global `Ctrl+K` e navegação por hash.
+- CSP restritiva, event delegation e acessibilidade reforçada.
+- Layout responsivo Visual Pro 360.
+- GitHub Actions com verificação de sintaxe e varredura estática.
+
+Última varredura: **47/47 verificações PASS**.
+
+## Próximos módulos do LAB
+- Pedidos / Delivery.
+- Produtos / Compras / Fornecedores.
+- Caixa.
+- Clientes / CRM.
+- Relatórios.
+- NEXO IA.
+- Integrações.
+- Licença e Suporte.
 
 ## Identidade visual
 - Azul principal: `#0A84FF`
