@@ -49,3 +49,5 @@ jobs:
         run: python3 tests/restaurant_sql_check.py
       - name: Driver catalog SQLite schema
         run: python3 tests/driver_catalog_sql_check.py
+      - name: Phase 7 waiter/catalog SQLite
+        run: python3 tests/waiter_catalog_sql_check.py
