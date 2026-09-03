@@ -28,17 +28,17 @@ const productionTickets=[
 ];
 
 const modifierGroups=[
- {name:'Proteína',min:1,max:1,required:true,options:[['Bife',0],['Frango',0],['Linguiça',0],['Ovo',0],['Carne adicional',6]]},
- {name:'Acompanhamentos',min:1,max:3,required:true,options:[['Arroz',0],['Feijão',0],['Salada',0],['Farofa',0],['Batata',3]]},
- {name:'Remoções',min:0,max:4,required:false,options:[['Sem cebola',0],['Sem alho',0],['Sem refogado',0],['Sem salada',0]]},
- {name:'Substituições',min:0,max:1,required:false,options:[['Trocar ovo por carne',5],['Trocar arroz por salada',0]]}
+ {name:'Proteína',min:1,max:1,required:true,freeQuota:1,options:[['Bife',0],['Frango',0],['Linguiça',0],['Ovo',0],['Carne adicional',6]]},
+ {name:'Acompanhamentos',min:1,max:3,required:true,freeQuota:3,options:[['Arroz',0],['Feijão',0],['Salada',0],['Farofa',0],['Batata',3]]},
+ {name:'Remoções',min:0,max:4,required:false,freeQuota:4,options:[['Sem cebola',0],['Sem alho',0],['Sem refogado',0],['Sem salada',0]]},
+ {name:'Substituições',min:0,max:1,required:false,freeQuota:0,options:[['Trocar ovo por carne',5],['Trocar arroz por salada',0]]}
 ];
 
 const printerRoutes=[
- {destination:'CAIXA',printer:'EPSON TM-T20 — Caixa',state:'TESTED',detail:'Pagamento/fechamento'},
- {destination:'COZINHA',printer:'Bematech MP-4200 — Cozinha',state:'CONFIGURED',detail:'Itens KITCHEN'},
- {destination:'BAR',printer:'Elgin i9 — Bar',state:'CONFIGURED',detail:'Itens BAR'},
- {destination:'EXPEDIÇÃO',printer:'Fila Windows — Expedição',state:'IMPLEMENTED',detail:'Conferência/retirada'}
+ {destination:'CAIXA',printer:'EPSON TM-T20 — Caixa',state:'CONFIGURED',detail:'Rota cadastrada; teste físico ainda pendente'},
+ {destination:'COZINHA',printer:'Bematech MP-4200 — Cozinha',state:'CONFIGURED',detail:'Itens KITCHEN; hardware ainda não homologado'},
+ {destination:'BAR',printer:'Elgin i9 — Bar',state:'CONFIGURED',detail:'Itens BAR; hardware ainda não homologado'},
+ {destination:'EXPEDIÇÃO',printer:'Fila Windows — Expedição',state:'IMPLEMENTED',detail:'Contrato de conferência/retirada'}
 ];
 
 const thematicMenus=[
@@ -55,10 +55,10 @@ const losses=[
 
 const integrationMaturity=[
  {name:'Consulta CEP',state:'IMPLEMENTED',detail:'Contrato e cache definidos; rede bloqueada no LAB'},
- {name:'Impressão por setor',state:'CONFIGURED',detail:'Rotas demonstrativas; hardware ainda não homologado'},
- {name:'Garçom mobile/LAN',state:'IMPLEMENTED',detail:'Contrato de operação definido; servidor privado ainda não ligado'},
+ {name:'Impressão por setor',state:'CONFIGURED',detail:'Rotas demonstrativas; teste e homologação física pendentes'},
+ {name:'Garçom mobile/LAN',state:'IMPLEMENTED',detail:'UI/contrato definidos; servidor privado ainda não ligado'},
  {name:'Fiscal / TEF',state:'NOT_CONFIGURED',detail:'Depende de provedor, credenciais e homologação'},
- {name:'Backup diário',state:'TESTED',detail:'Contrato/testes estáticos; geração física ainda é gate privado'}
+ {name:'Backup diário',state:'IMPLEMENTED',detail:'Contrato e regressão estática prontos; geração/restauração física ainda são gates privados'}
 ];
 
 const selectedModifiers=new Set(['Bife','Arroz','Feijão','Salada','Sem cebola','Trocar ovo por carne']);
@@ -75,6 +75,18 @@ function statusLabel(status){return({FREE:'Livre',OCCUPIED:'Ocupada',ORDER_SENT:
 function statusTone(status){return status==='FREE'||status==='READY'||status==='DELIVERED'?'ok':status==='OCCUPIED'||status==='ORDER_SENT'?'blue-pill':status==='PREPARING'||status==='ACCEPTED'?'warn':status==='CLOSING'?'purple':'neutral'}
 function maturityLabel(status){return({IMPLEMENTED:'Implementado',CONFIGURED:'Configurado',TESTED:'Testado',HOMOLOGATED:'Homologado',NOT_CONFIGURED:'Não configurado'})[status]||status}
 function maturityTone(status){return status==='HOMOLOGATED'?'ok':status==='TESTED'?'blue-pill':status==='CONFIGURED'?'purple':status==='IMPLEMENTED'?'neutral':'warn'}
+function modifierGroupForOption(option){return modifierGroups.find(group=>group.options.some(([label])=>label===option))}
+function modifierCount(group){return group.options.filter(([label])=>selectedModifiers.has(label)).length}
+function validateModifierSelection(){
+ for(const group of modifierGroups){const count=modifierCount(group);if(count<group.min)return{ok:false,message:`${group.name}: escolha pelo menos ${group.min}.`};if(count>group.max)return{ok:false,message:`${group.name}: escolha no máximo ${group.max}.`}}
+ return{ok:true,message:'Modificadores válidos.'};
+}
+function toggleModifier(option){
+ const group=modifierGroupForOption(option);if(!group)return;
+ if(selectedModifiers.has(option)){selectedModifiers.delete(option);renderRestaurant();return}
+ if(modifierCount(group)>=group.max){announce(`${group.name}: limite máximo de ${group.max} escolha(s).`);setResult('p5WaiterResult',`${group.name}: limite máximo de ${group.max} escolha(s).`,'warn');return}
+ selectedModifiers.add(option);renderRestaurant();
+}
 
 function restaurantNotice(){const box=n('div','demo-notice');box.append(pill('LAB','blue-pill'),n('span','', 'Operação Restaurante é demonstrativa: estados mudam somente nesta sessão e não baixam estoque nem gravam venda real.'));return box}
 
@@ -109,7 +121,7 @@ function renderSalon(root){
 }
 
 function renderModifierGroup(group){
- const card=n('div','p5-mod-group');const title=n('div','p5-mod-title');title.append(n('strong','',group.name),pill(`${group.min}–${group.max}`,group.required?'blue-pill':'neutral'));card.append(title);const opts=n('div','p5-mod-options');
+ const card=n('div','p5-mod-group');const title=n('div','p5-mod-title');title.append(n('strong','',group.name),pill(`${group.min}–${group.max} • grátis ${group.freeQuota}`,group.required?'blue-pill':'neutral'));card.append(title);const opts=n('div','p5-mod-options');
  group.options.forEach(([label,extra])=>{const active=selectedModifiers.has(label);const b=btn('',`p5-mod-option${active?' active':''}`,'modifier-toggle',label);b.append(n('span','',label),n('b','',extra?`+ ${money(extra)}`:'Incluso'));opts.append(b)});card.append(opts);return card;
 }
 
@@ -143,7 +155,7 @@ function appendProductFoodPanel(){
  const cost=10,price=15,profit=price-cost,margin=profit/price*100,markup=profit/cost*100;const wrap=n('section','p5-product-food');wrap.id='p5FoodProduct';
  const grid=n('div','module-grid two');const recipe=n('article','panel');recipe.append(panelHead('Ficha Técnica / Composição','CMV, rendimento e baixa de ingredientes',pill('MARMITA','blue-pill')));const rows=n('div','p5-recipe-list');[['Arroz','180 g','R$ 1,10'],['Feijão','140 g','R$ 1,25'],['Bife','160 g','R$ 5,20'],['Salada','90 g','R$ 0,90'],['Embalagem','1 un.','R$ 0,85']].forEach(([item,qty,c])=>{const row=n('div','p5-recipe-row');row.append(n('strong','',item),n('span','',qty),n('b','',c));rows.append(row)});recipe.append(rows,n('p','p5-help','A baixa real deve acontecer pela ficha técnica somente após a operação canônica de produção/venda definida no banco privado.'));
  const economics=n('article','panel');economics.append(panelHead('Custo, Margem e Markup','Conceitos exibidos separadamente',pill('Sem ambiguidade','ok')));const econ=n('div','p5-economics');[['Custo',money(cost)],['Venda',money(price)],['Lucro bruto',money(profit)],['Margem sobre venda',`${margin.toFixed(2).replace('.',',')}%`],['Markup sobre custo',`${markup.toFixed(2).replace('.',',')}%`]].forEach(([a,b])=>{const row=n('div','p5-econ-row');row.append(n('span','',a),n('strong','',b));econ.append(row)});economics.append(econ);grid.append(recipe,economics);wrap.append(grid);
- const mods=n('article','panel');mods.append(panelHead('Matriz de Modificadores','Mínimo, máximo, cota grátis, preço e substituição',pill('Estruturado','purple')));const table=n('div','p5-mod-matrix');modifierGroups.forEach(g=>{const row=n('div','p5-mod-matrix-row');row.append(n('strong','',g.name),n('span','',`mín. ${g.min}`),n('span','',`máx. ${g.max}`),pill(g.required?'Obrigatório':'Opcional',g.required?'blue-pill':'neutral'),n('span','',g.options.some(([,p])=>p>0)?'Possui adicionais':'Sem adicional'));table.append(row)});mods.append(table);wrap.append(mods);page.append(wrap);
+ const mods=n('article','panel');mods.append(panelHead('Matriz de Modificadores','Mínimo, máximo, cota grátis, preço e substituição',pill('Estruturado','purple')));const table=n('div','p5-mod-matrix');modifierGroups.forEach(g=>{const row=n('div','p5-mod-matrix-row');row.append(n('strong','',g.name),n('span','',`mín. ${g.min}`),n('span','',`máx. ${g.max}`),pill(g.required?'Obrigatório':'Opcional',g.required?'blue-pill':'neutral'),n('span','',`cota grátis ${g.freeQuota} • ${g.options.some(([,p])=>p>0)?'possui adicionais':'sem adicional'}`));table.append(row)});mods.append(table);wrap.append(mods);page.append(wrap);
 }
 
 function appendLossPanel(){
@@ -170,13 +182,15 @@ function appendIntegrationMaturity(){
 
 function updateTableFromTickets(tableLabel){
  const table=tableState.find(t=>t.label===tableLabel);if(!table)return;const tickets=productionTickets.filter(t=>t.table===tableLabel);if(!tickets.length)return;
- if(tickets.every(t=>['READY','DELIVERED'].includes(t.status)))table.status='READY';
+ if(tickets.every(t=>t.status==='DELIVERED'))table.status='SERVING';
+ else if(tickets.every(t=>['READY','DELIVERED'].includes(t.status)))table.status='READY';
  else if(tickets.some(t=>['ACCEPTED','PREPARING'].includes(t.status)))table.status='PREPARING';
  else if(tickets.some(t=>t.status==='NEW'))table.status='ORDER_SENT';
 }
 
 function sendWaiterDemo(){
- if(waiterOrderSent)return;waiterOrderSent=true;const table=tableState.find(t=>t.id==='T08');if(table){table.status='ORDER_SENT';table.waiter='João';table.total=61.90}
+ if(waiterOrderSent)return;const validation=validateModifierSelection();if(!validation.ok){setResult('p5WaiterResult',validation.message,'warn');announce(validation.message);return}
+ waiterOrderSent=true;const table=tableState.find(t=>t.id==='T08');if(table){table.status='ORDER_SENT';table.waiter='João';table.total=61.90}
  productionTickets.push(
   {id:'K-212',order:'P-1206',table:'Mesa 08',sector:'KITCHEN',status:'NEW',age:0,waiter:'João',items:['1 × Marmita Grande','Bife • arroz • feijão • salada','Sem cebola • trocar ovo por carne']},
   {id:'B-091',order:'P-1206',table:'Mesa 08',sector:'BAR',status:'NEW',age:0,waiter:'João',items:['1 × Coca-Cola — gelo + limão','1 × Suco de laranja — sem açúcar']}
@@ -190,7 +204,7 @@ document.addEventListener('click',event=>{
  if(action==='restaurant-tab'){restaurantTab=value;renderRestaurant()}
  else if(action==='select-table'){selectedTableId=value;renderRestaurant()}
  else if(action==='open-waiter'){selectedTableId=value;restaurantTab='garcom';renderRestaurant()}
- else if(action==='modifier-toggle'){if(selectedModifiers.has(value))selectedModifiers.delete(value);else selectedModifiers.add(value);renderRestaurant()}
+ else if(action==='modifier-toggle')toggleModifier(value);
  else if(action==='waiter-send')sendWaiterDemo();
  else if(action==='ticket-advance'){const ticket=productionTickets.find(t=>t.id===value);if(ticket){ticket.status=nextTicketStatus(ticket.status);updateTableFromTickets(ticket.table);announce(`${ticket.id}: ${statusLabel(ticket.status)}.`);renderRestaurant()}}
  else if(action==='printer-test')announce(`Teste LAB da rota ${value}: nenhum dado foi enviado para impressora física.`)
