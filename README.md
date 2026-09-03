@@ -20,7 +20,7 @@ Implementado na branch `9.8-lab-hardening`:
 - Layout responsivo Visual Pro 360.
 - GitHub Actions com verificação de sintaxe e varredura estática.
 
-Última varredura: **47/47 verificações PASS**.
+Última varredura validada: **47/47 verificações PASS** + `node --check ui/app.js` PASS.
 
 ## Próximos módulos do LAB
 - Pedidos / Delivery.
