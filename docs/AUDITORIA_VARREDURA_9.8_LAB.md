@@ -1,161 +1,184 @@
 # NEXO ERP PRO 9.8 LAB — Auditoria e Varredura Crítica
 
-## Escopo desta rodada
-Esta auditoria cobre a camada pública UI/UX do 9.8 LAB e os requisitos de integração futura com o Electron privado. Ela **não afirma** que o `app.asar` comercial 9.7 já foi alterado.
+## Escopo
+Esta auditoria cobre a camada pública UI/UX do 9.8 LAB, a base pública local de Avaré/SP e os requisitos para futura integração com o Electron/SQLite privado. Ela **não afirma** que o `app.asar` comercial 9.7 já foi alterado.
 
-## Módulos operacionais implementados no LAB
+## Estado atual do LAB
+Os 16 módulos da navegação possuem experiência própria ou operação demonstrativa no LAB:
 
-### PDV / Nova Venda
-- Busca por nome e SKU.
-- Catálogo responsivo.
-- Carrinho local com incremento/decremento de quantidade.
-- Limite de quantidade pelo estoque demonstrativo, com aviso ao atingir o máximo.
+1. Dashboard
+2. PDV / Nova Venda
+3. Pedidos
+4. Produtos
+5. Estoque
+6. Compras
+7. Caixa
+8. Recebimentos 360
+9. Financeiro
+10. Delivery
+11. Clientes / CRM
+12. Fornecedores
+13. Relatórios
+14. NEXO IA
+15. Integrações
+16. Licença e Suporte
+
+Todas as mutações continuam locais/demonstrativas. A camada pública não grava venda, compra, baixa financeira, movimento real de estoque/caixa, dado privado de cliente ou segredo de licenciamento.
+
+## Módulos e regras principais
+
+### PDV
+- Busca por nome/SKU e carrinho responsivo.
+- Quantidade limitada ao estoque demonstrativo, com aviso de limite.
 - Dinheiro, PIX, débito, crédito e fiado como opções visuais.
-- Suspensão e limpeza de venda em memória.
-- Finalização deliberadamente bloqueada para persistência: o LAB valida a UX e o resumo, mas não grava venda real.
+- Suspensão/limpeza somente em memória.
+- Finalização valida UX/resumo e **não persiste venda real**.
 
-### Recebimentos 360
-- Vendido, liquidado, a conciliar e a receber em indicadores separados.
-- Movimentos com bruto, líquido, origem, estágio e data.
-- Filtros de liquidados e pendentes com anúncio de quantidade.
-- Agenda de liquidação para PIX, débito, crédito e marketplace.
-- Regra preservada: venda não equivale a recebimento.
+### Recebimentos 360 / Financeiro
+- Venda, previsão e liquidação permanecem separadas.
+- Bruto/líquido, cartões em conciliação, marketplace em repasse e fiado a receber.
+- Aging, fluxo projetado, contas a receber/pagar, margem e compromissos.
+- Caixa físico não recebe automaticamente cartão/marketplace/fiado.
 
-### Financeiro
-- Contas a receber, contas a pagar, saldo projetado e margem operacional.
-- Aging de recebíveis.
-- Fluxo de caixa projetado.
-- Próximos compromissos e prioridades.
-- Ação de destaque dos compromissos substitui o antigo botão sem comportamento.
-- Nenhuma baixa/lançamento é persistido na camada pública.
-
-### Estoque
+### Estoque / Produtos / Compras
 - Físico, reservado, disponível e em trânsito.
-- Disponível calculado como `físico - reservado`.
-- Busca e filtros de atenção/críticos com anúncio de quantidade.
-- Sugestões demonstrativas de reposição.
-- Regra preservada: item em trânsito não aumenta estoque físico antes do recebimento.
+- `disponível = físico - reservado`.
+- Em trânsito não aumenta físico antes do recebimento.
+- Catálogo com custo, preço, margem e estoque.
+- Limiar nomeado `LOW_MARGIN=55` usado por indicador e filtro.
+- Aprovação/recebimento de compra são simulações no LAB.
 
-### Pedidos
-- Fila operacional com canal, cliente, tempo, total, status e próxima ação.
-- Filtros de ativos/todos/atenção.
-- O filtro de atenção exclui pedidos já entregues.
-- Evolução de status apenas em memória do LAB.
+### Pedidos / Delivery
+- Fila, canal, SLA, prioridade, ETA e evolução de status em memória.
+- Filtro de atenção exclui pedidos entregues.
+- Delivery recebeu painel de operadores candidatos de Avaré, sempre como **não homologados**.
 
-### Delivery
-- Entregas por pedido, região, entregador, ETA e status.
-- Indicadores de SLA.
-- Faixas de desempenho visualizadas sem localização real.
+### Clientes / Fornecedores
+- CRM demonstrativo sem PII real.
+- Recência, frequência, valor, crédito e risco.
+- Fornecedores com lead time, score e valores em aberto.
+- Painel local de Avaré para embalagens, supermercados, carnes e gás.
 
-### Produtos
-- Catálogo com busca por nome/SKU/categoria.
-- Custo, preço, margem e estoque.
-- Limiar único `LOW_MARGIN=55` usado pelo indicador e pelo filtro de margem.
-- Filtro de estoque baixo.
+### Relatórios
+- Prévia para vendas/margem, recebimentos, estoque/giro, compras/fornecedores, caixa/financeiro e clientes/retenção.
+- Nenhuma exportação real é criada na camada pública.
 
-### Compras
-- Ordens de compra com fornecedor, itens, previsão, total e status.
-- Aprovação/recebimento simulados em memória.
-- Recebimento do LAB declara explicitamente que não altera estoque real.
-- Checklist de conferência antes da entrada transacional.
+### NEXO IA
+- Insights de reposição, recebimentos, margem, clientes e oportunidades locais.
+- IA pode preparar rascunhos e navegar para módulos.
+- Ação operacional real exige confirmação humana.
+- Correção aplicada: “Comparar entregas” agora abre **Delivery**, não Fornecedores.
 
-### Fornecedores
-- Lead time, score, valor em aberto e última compra.
-- Badges de score crítico/atenção/sucesso corrigidos.
+### Integrações
+- UI pública não realiza rede (`connect-src 'none'`).
+- Modelo privado planejado: HTTPS + allowlist + timeout + validação + cache.
+- ViaCEP como consulta primária, BrasilAPI como fallback e Correios DNE/API autorizada como opção de carga/validação oficial.
 
-### Caixa
-- Fundo inicial, vendas em dinheiro, suprimentos, sangrias e caixa esperado.
-- Cartões/marketplaces/recebíveis permanecem fora do caixa físico.
-- Suprimento, sangria e fechamento são simulações locais.
-- Sangria bloqueia valor inválido ou superior ao caixa esperado.
+### Licença e Suporte
+- Licença, suporte e conectividade são estados independentes.
+- Falha de internet não equivale a revogação.
+- Diagnóstico não expõe chave privada/token.
+- Chamados reais dependem do gateway privado HTTPS.
 
-### Clientes / CRM
-- Recência, frequência, valor histórico, segmento e crédito.
-- Filtros de risco e saldo em aberto.
-- Nenhum telefone/e-mail/dado pessoal real entra na camada pública.
-- Badge VIP corrigido para a identidade roxa reservada a destaque especial.
+## Base pública local — Avaré/SP
 
-## Achados corrigidos nesta branch
+### Metadados
+- Município: Avaré/SP
+- IBGE: `3504503`
+- DDD: `14`
+- Faixa de CEP usada como referência: `18700-001` a `18709-999`
+- Fontes públicas pesquisadas reportam cerca de `1.524` CEPs.
 
-### Alta prioridade
-1. **CSP ausente na camada pública** — adicionada política restritiva sem `unsafe-inline`, sem rede e sem objetos/plugins.
-2. **Busca usava `innerHTML`** — substituída por construção segura de DOM com `textContent`/`createElement`.
-3. **Menu compacto ilegível** — o breakpoint antigo transformava todos os módulos no mesmo marcador `•`; substituído por identificadores curtos exclusivos e rótulos acessíveis.
-4. **Command Palette sem controle de foco** — adicionados diálogo modal, restauração de foco, `Escape`, trava de Tab e navegação por setas.
-5. **Risco de tela em branco** — adicionado fallback seguro quando um módulo marcado/roteado não consegue ser montado.
+### Política correta para número do imóvel
+O sistema **não infere o número do imóvel a partir do CEP**. O fluxo projetado é:
+1. usuário informa CEP;
+2. processo principal consulta provider HTTPS;
+3. cidade/UF/logradouro/bairro são validados;
+4. resultado é armazenado em cache SQLite;
+5. usuário informa/confirma número e complemento;
+6. faixa de numeração pode detectar inconsistência, mas nunca identificar automaticamente um imóvel.
 
-### Correções de lógica e UX
-6. `aria-current` acompanha o módulo ativo.
-7. Busca `Ctrl+K` informa `aria-expanded` e normaliza acentos.
-8. Resultados de busca não executam HTML gerado.
-9. Botões HTML declaram `type="button"`.
-10. Links e botões possuem `:focus-visible`.
-11. Gráfico demonstrativo possui descrição acessível.
-12. Ações do Dashboard navegam para seus módulos.
-13. Rotas por hash mantêm o módulo atual sem servidor.
-14. `prefers-reduced-motion` e fallback de `backdrop-filter` foram adicionados.
-15. Layout foi revisado em 1180 px, 850 px e 560 px.
-16. Badges `danger` e `purple` receberam estilos próprios.
-17. Filtro de atenção de Pedidos não inclui concluídos.
-18. Indicador/filtro de margem usam o mesmo limiar nomeado.
-19. Trecho temporário `appendDummy` foi removido do DOM do catálogo.
-20. Sangria valida valor não positivo e saldo esperado.
+Isso evita cadastrar endereços falsos e cobre casos em que uma mesma rua troca de CEP conforme a faixa de numeração.
+
+### Seed preparado
+Arquivo: `db/avare_public_seed.sql`.
+
+Cria:
+- `public_postal_cache`;
+- `public_supplier_candidate`;
+- `public_locality_meta`.
+
+O seed contém metadados de Avaré, exemplos de faixas postais e **26 candidatos locais**, todos com status de candidato e exigência de homologação comercial.
+
+Distribuição dos 26 candidatos:
+- 6 embalagens;
+- 6 supermercados;
+- 5 carnes/açougues;
+- 5 entregas/transportes;
+- 4 gás.
+
+### Correções de pesquisa local
+- RR EXPRESS foi corrigido para `Rua Acre, 1951 - Centro, Avaré/SP, 18700-260` após validação cruzada.
+- UI e SQL foram equalizados para exatamente os mesmos 26 IDs; antes havia divergência entre os dois conjuntos.
+
+## Achados corrigidos na branch
+- CSP ausente.
+- Busca com `innerHTML`.
+- Menu compacto com marcador genérico.
+- Command Palette sem controle adequado de foco.
+- Risco de módulo abrir área em branco.
+- Botão financeiro sem comportamento.
+- Falta de aviso ao atingir limite demonstrativo do PDV.
+- Filtros sem anúncio de contagem.
+- Badges `danger`/`purple` sem estilo.
+- Filtro de Pedidos incluindo concluídos.
+- Critérios divergentes de margem.
+- Código temporário `appendDummy`.
+- Validação insuficiente de sangria.
+- Divergência UI ↔ SQL na base local.
+- Bairro/nome/telefone inconsistentes do candidato RR corrigidos.
+- Insight da IA de entrega apontando para módulo incorreto.
 
 ## Varredura automatizada
-Arquivos: `tests/ui_static_check.mjs` e `.github/workflows/ui-static-check.yml`.
+Arquivos principais:
+- `tests/ui_static_check.mjs`
+- `tests/avare_integrity_check.mjs`
+- `.github/workflows/ui-static-check.yml`
 
-O pipeline executa:
-- `node --check ui/app.js`;
-- `node --check ui/phase2.js`;
-- varredura CSP/UX/segurança;
-- validação de `modules.css` e `phase2.css`;
-- presença dos 16 módulos de navegação;
-- presença das 11 telas operacionais já montadas;
-- ausência de `innerHTML`, `insertAdjacentHTML`, `eval`, `new Function` e `document.write`;
-- ausência de URLs remotas na UI pública;
-- validação das regras demonstrativas de estoque, recebimentos, pedidos, margem, compras, caixa e CRM.
+O workflow valida sintaxe de `app.js`, `phase2.js`, `avare-data.js`, `phase3.js` e `avare-nav-guard.js`, além de CSP, ausência de APIs DOM inseguras, navegação, regras de negócio demonstrativas, responsividade, base Avaré e consistência UI ↔ SQL.
 
-**Resultado da rodada:** 67/67 verificações PASS no GitHub Actions, além das duas verificações de sintaxe JavaScript.
+**Resultado atual:**
+- `88/88` verificações estáticas: **PASS**;
+- integridade Avaré `26/26` UI ↔ SQL: **PASS**;
+- RR EXPRESS corrigido: **PASS**;
+- redirecionamento da IA para Delivery: **PASS**;
+- sintaxe dos cinco scripts: **PASS**.
 
-## Gates obrigatórios antes de portar para o Electron comercial
+## O que ainda não significa “produção pronta”
+- Os ~1.524 CEPs não foram copiados em massa para o repositório público. O LAB contém metadados, exemplos e arquitetura de lookup/cache. A carga integral deve vir de fonte autorizada/adequada no ambiente privado.
+- O banco comercial SQLite do Electron ainda não recebeu este seed.
+- O `app.asar` comercial 9.7 ainda não foi reconstruído com esta UI.
+- Persistência/IPC/licença/backup reais continuam pertencendo ao código privado.
+- Windows 10/11, DPI e periféricos ainda exigem homologação física.
+- Authenticode depende de certificado real da NEXO.
+- Fiscal/TEF/PIX/marketplaces dependem de provedores, credenciais e homologação.
 
-### P0 — não liberar sem conferir
-- `contextIsolation=true`, `nodeIntegration=false`, `sandbox=true` onde compatível e `webSecurity=true`.
-- Validar `senderFrame`/origem em **todo IPC privilegiado**.
-- Preload deve expor funções específicas via `contextBridge`; nunca repassar `ipcRenderer.send/invoke` genérico ao renderer.
-- Bloquear navegação não permitida, `webview`, novas janelas e permissões por padrão.
-- `shell.openExternal` somente para URLs parseadas e em allowlist HTTPS.
-- Manter chave privada, token administrativo e credenciais de integrações fora do cliente.
-- Venda/cancelamento/estoque/caixa/financeiro precisam continuar transacionais e auditáveis.
+## Gates para integração privada
+### P0
+- `contextIsolation=true`, `nodeIntegration=false`, `sandbox=true` onde compatível, `webSecurity=true`.
+- Validar sender/origem em todo IPC privilegiado.
+- `contextBridge` deve expor APIs específicas, nunca IPC genérico.
+- Bloquear navegação/webview/janelas/permissões por padrão.
+- `shell.openExternal` somente com URL HTTPS parseada e allowlist.
+- SQLite/WAL com transações; backup via mecanismo seguro e verificação pós-backup.
+- Segredos/chaves/tokens fora do pacote cliente.
 
-### P0 — banco e backup
-- SQLite/WAL permanece base operacional.
-- Não copiar ingenuamente um arquivo SQLite ativo enquanto há transação.
-- Preferir SQLite Online Backup API ou `VACUUM INTO` conforme suporte da biblioteca usada.
-- Após backup: validar abertura + `PRAGMA quick_check`/checagem equivalente, checksum e política de retenção.
-- Restauração deve ocorrer somente em fluxo controlado, nunca sobre banco aberto pela aplicação.
-
-### P1 — pipeline Windows oficial
-Avaliar/aplicar no rebuild oficial do Electron, antes de Authenticode:
-- `RunAsNode = false` se o aplicativo não depender de `ELECTRON_RUN_AS_NODE`/`child_process.fork`.
-- `EnableNodeOptionsEnvironmentVariable = false` em produção se não houver dependência legítima.
-- `EnableNodeCliInspectArguments = false` em produção.
-- `EnableEmbeddedAsarIntegrityValidation = true`.
-- `OnlyLoadAppFromAsar = true`.
-- Avaliar `EnableCookieEncryption` somente com plano de migração.
-
-### P1 — protocolo e renderer
-- Avaliar migração de `file://` para protocolo customizado registrado como seguro/standard no Electron.
-- CSP do aplicativo real deve ser ajustada ao protocolo e às integrações necessárias; não copiar cegamente `connect-src 'none'` da UI pública.
-- Nenhuma integração externa deve liberar `http://`; usar HTTPS e allowlist por provedor.
-
-## Dívidas técnicas abertas no ERP privado
-- Reduzir IPC síncrono e operações de disco no thread principal.
-- Separar progressivamente o `app.js` privado por domínios.
-- Tornar SQLite relacional cada vez mais a fonte transacional primária.
-- Homologar Windows 10/11, DPI, impressora térmica, leitor, balança, gaveta e cenários de energia/rede.
-- Aplicar Authenticode quando existir certificado comercial NEXO.
-- Integrações fiscais/TEF/PIX/marketplaces continuam dependentes de credenciais, contratos e homologação reais.
+### P1
+- Reduzir IPC síncrono e trabalho de disco no thread principal.
+- Separar o código privado por domínio.
+- Avaliar protocolo customizado seguro em lugar de `file://`.
+- Aplicar Electron Fuses no rebuild oficial quando compatível.
+- Authenticode somente com certificado comercial real.
 
 ## Regra de promoção
 `9.7 FINAL congelada -> 9.8 LAB -> regressão completa -> 9.8 RC -> teste físico Windows -> 9.8 FINAL`.
